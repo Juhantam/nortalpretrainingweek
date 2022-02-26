@@ -1,30 +1,64 @@
-import logo from './logo.svg';
+import React from "react";
+import styled from "@emotion/styled";
+
 import './App.css';
-import pokemon from "./pokemon.json";
+import PokemonTable from "./Components/PokemonTable";
+import PokemonInfo from "./Components/PokemonInfo";
+import PokemonFilter from "./Components/PokemonFilter";
+import PokemonContext from "./PokemonContext";
+
+const Title = styled.h1`
+  text-align: center;
+`;
+
+const TwoColumnLayout = styled.div`
+  display: grid;
+  grid-template-columns: 70% 30%;
+  grid-column-gap: 1rem;
+`;
+
+const Container = styled.div`
+  margin: auto;
+  width: 800px;
+  padding-top: 1rem;
+`;
 
 function App() {
 
+    const [filter, filterSet] = React.useState("");
+    const [pokemon, pokemonSet] = React.useState([]);
+    const [selectedItem, selectedItemSet] = React.useState(null);
+
+    React.useEffect(() => {
+        fetch("http://localhost:3000/nortalpretrainingweek/pokemon.json")
+            .then(response => response.json())
+            .then((data) => pokemonSet(data))
+    }, [])
 
     return (
-        <div className="App">
-            <h1 className="title">Pokemon search</h1>
-            <table width="100%">
-                <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Type</th>
-                </tr>
-                </thead>
-                <tbody>
-                {pokemon.slice(0, 20).map(pokemon => (
-                    <tr key={pokemon.id}>
-                        <td>{pokemon.name.english}</td>
-                        <td>{pokemon.type.join(", ")}</td>
+        <PokemonContext.Provider
+            value={{
+                filter,
+                filterSet,
+                pokemon,
+                pokemonSet,
+                selectedItem,
+                selectedItemSet,
 
-                    </tr>))}
-                </tbody>
-            </table>
-        </div>
+            }}
+        >
+            <Container>
+                <Title className="title">Pokemon search</Title>
+
+                <TwoColumnLayout>
+                    <div>
+                        <PokemonFilter/>
+                        <PokemonTable/>
+                    </div>
+                    <PokemonInfo/>
+                </TwoColumnLayout>
+            </Container>
+        </PokemonContext.Provider>
     );
 }
 
