@@ -1,10 +1,10 @@
 import PokemonRow from "./PokemonRow";
-import {useDispatch, useSelector} from "react-redux";
+import useStore from "../store";
 
 function PokemonTable() {
-    const dispatch = useDispatch();
-    const pokemon = useSelector((state) => state.pokemon);
-    const filter = useSelector((state) => state.filter);
+    const pokemon = useStore((state) => state.pokemon);
+    const filter = useStore((state) => state.filter);
+    const setSelectedItem = useStore((state) => state.setSelectedItem);
     return (
         <>
             <table width="100%">
@@ -20,10 +20,7 @@ function PokemonTable() {
                     .slice(0, 20)
                     .map((pokemon) => (
                         <PokemonRow pokemon={pokemon} key={pokemon.id}
-                                    onSelect={(pokemon) => dispatch({
-                                        type: "SET_SELECTED_ITEM",
-                                        payload: pokemon,
-                                    })}/>
+                                    onSelect={(pokemon) => setSelectedItem(pokemon)}/>
                     ))}
                 </tbody>
             </table>
