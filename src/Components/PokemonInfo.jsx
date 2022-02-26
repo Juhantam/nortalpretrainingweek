@@ -3,9 +3,7 @@ import PokemonType from "./../PokemonType";
 import PokemonContext from "../PokemonContext";
 
 function PokemonInfo() {
-    const {
-        selectedItem,
-    } = useContext(PokemonContext);
+    const {state: {selectedItem},} = useContext(PokemonContext);
     return selectedItem ? (
         <>
             <div>
